@@ -8,26 +8,24 @@ import { useState, useEffect } from 'react';
 
 
 function Header() {
-    const [data, setdata] = useState("")
-    const [inputcal, setinputval] = useState(data)
-
-    const searchdata =  async() => {
-        if (data !='') {
-            setinputval(data)
-            console.log(inputcal)
-                const ApiKey = 'b4edc44ba6a3ce70ce3996b111465ee4'
-                const id = '60a6dbab'
-                let url = await fetch(`https://api.edamam.com/search?q=${inputcal}&app_id=${id}&app_key=${ApiKey}`)
-                let res = await url.json()
-                console.log(res)
+    const [data, setdata] = useState('')
+    const [response,setresponse]= useState('')
+    // debugger
+    const searchdata = async () => {
+        if (data != '') {
+            const ApiKey = 'b4edc44ba6a3ce70ce3996b111465ee4'
+            const id = '60a6dbab'
+            let url = await fetch(`https://api.edamam.com/search?q=${data}&app_id=${id}&app_key=${ApiKey}`)
+            let res = await url.json()
+            console.log('api data aa raha hy',res)
+            setresponse(res)
         }
         else { alert('bhag') }
     }
-    useEffect(() => {
-        searchdata()
-    }, [inputcal]);
-
-    // console.log(data)
+    // useEffect(() => {
+    //     searchdata()
+    // }, [data]);
+   
     return (
         <div className="container-fluid banner">
             <div className="container">
@@ -73,7 +71,7 @@ function Header() {
                     <div className="row">
                         <div className="col-md-6">
                             <div>
-                                <input type="text" value={data} placeholder='Your Favourite Meal' onChange={(e) => { setdata(e.target.value) }} />
+                                <input type="text"  placeholder='Your Favourite Meal' onChange={(e) =>{setdata(e.target.value)}} />
                             </div>
                             <div>
                                 <button onClick={searchdata}>search</button>
@@ -84,7 +82,20 @@ function Header() {
                                 <img src={pizzaimg} alt="" />
                             </div>
                         </div>
-
+                    </div>
+                    <div className="products">
+                        <h4>
+                            Products
+                        </h4>
+                        <div className="row">
+                           {
+                           data!="" ? response.hits.map((items)=>{
+                                console.log(items.recipe.url)
+                            }):
+        
+                                console.log('data not found')                   
+                           }
+                        </div>
                     </div>
                 </div>
             </div>
